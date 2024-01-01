@@ -1,2 +1,17 @@
 <h1>Hello World</h1>
 <p>This is my first webpage and also a webserver</p>
+<p>My name is {{ first_name }}</p>
+<p>{{ stuff|safe }}</p>
+<p>{{ stuff|striptags }}</p>
+<p>{{ stuff|title }}</p>
+{% for i in  item_list%}
+    {% if i == 41 %}
+        <p>Invalid item list</p>
+    {% else %}
+        <p>{{ i }}</p>
+
+    {% endif %}
+
+{% endfor %}
+
+
