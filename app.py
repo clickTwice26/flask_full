@@ -10,9 +10,9 @@ def index():
     stuff = "This is <strong> Bold </strong>"
     item_list = ["item1", "item2", "item3", 41, 41]
     return render_template("index.html", first_name=first_name, stuff=stuff, item_list=item_list)
-@app.route("/user")
-def user():
-    return render_template("user.html")
+@app.route("/user/<name>")
+def user(name):
+    return render_template("user.html", name=name)
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("404.html"), 404
