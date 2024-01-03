@@ -9,9 +9,10 @@ app = Flask(__name__) #helps find all of our files and directory
 app.config['SECRET_KEY'] = 'chipichipichapachapadubidubudabadaba'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Add database
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+# Add database(old.1)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+# New Database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/our_users'
 # Initialize the Database
 db = SQLAlchemy(app)
 app.app_context().push()
