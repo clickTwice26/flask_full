@@ -2,14 +2,59 @@ from flask import Flask, render_template, request, redirect,flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 tutorial_link="https://www.youtube.com/watch?v=0Qxtt4veJIc&list=PLCC34OHNcOtolz2Vd9ZSeSXWc8Bq23yEz"
 app = Flask(__name__) #helps find all of our files and directory
 app.config['SECRET_KEY'] = 'chipichipichapachapadubidubudabadaba'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Add database
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+# Initialize the Database
+db = SQLAlchemy(app)
+app.app_context().push()
+# Create Model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), nullable=False, unique=True)
+    date_added = (db.Column(db.DateTime, default=datetime.utcnow()))
+
+    # Create a string
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
 
 # Create a Form Class
-class NamerForm(FlaskForm):
-    name = StringField("What's your name?", validators=[DataRequired()])
+class UserFrom(FlaskForm):
+    name = StringField("Name here", validators=[DataRequired()])
+    email = StringField("Email here", validators=[DataRequired()])
+
     submit = SubmitField("Submit")# Create a route decorator
+@app.route('/user/add', methods=['GET', 'POST'])
+def add_user():
+    name = None
+    form = UserFrom()
+
+    if form.validate_on_submit():
+        # print(type(form.name.data))
+        # print(type(form.email.data))
+        # return "None"
+        user = User.query.filter_by(email=str(form.email.data)).first()
+
+        if user is None:
+            user = User(name=form.name.data, email=form.email.data)
+            db.session.add(user)
+            db.session.commit()
+        name =form.name.data
+        form.name.data = ''
+        form.email.data = ''
+        flash("User Added Successfully")
+    our_users = User.query.order_by(User.date_added)
+    return render_template("add_user.html", form=form, name=name, our_users=our_users)
+
 @app.route("/")
 def index():
 

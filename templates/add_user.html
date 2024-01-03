@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+    {% if name %}
+            {% for message in get_flashed_messages() %}
+       <div class="alert alert-info" role="alert">
+      {{ message }}
+       </div>
+     {% endfor %}
+
+        <h1>User added! {{ name }}</h1><br>
+<table class="table table-hover table-bordered table-striped">
+<tr>
+    <td>Serial No.</td>
+    <td>Name</td>
+    <td>Email Address</td>
+</tr>
+        {% for ouruser in our_users %}
+            <tr>
+            <td>{{ ouruser.id }}  </td>
+              	<td>{{ ouruser.name }}</td>
+             <td>{{ ouruser.email }}</td>
+            </tr>
+        {% endfor %}
+
+</table>
+
+    	{% else %}
+        <h1>User List:</h1><br>
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+
+        <form action="/user/add" method="POST">
+            {{ form.hidden_tag() }}
+        {{ form.name.label(class='form-label') }}
+        {{ form.name(class='form-control') }}<br>
+                    {{ form.email.label(class='form-label') }}
+        {{ form.email(class='form-control') }}<br>
+        {{ form.submit(class='btn btn-primary') }}
+        </form>
+        <hr>
+<table class="table table-hover table-bordered table-striped">
+<tr>
+    <td>Serial No.</td>
+    <td>Name</td>
+    <td>Email Address</td>
+</tr>
+        {% for ouruser in our_users %}
+            <tr>
+            <td>{{ ouruser.id }}  </td>
+              	<td>{{ ouruser.name }}</td>
+             <td>{{ ouruser.email }}</td>
+            </tr>
+        {% endfor %}
+
+</table>
+    {% endif %}</div>
+
+{% endblock %}
