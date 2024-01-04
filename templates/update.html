@@ -11,7 +11,7 @@
        </div>
      {% endfor %}
 
-        <h1>User added! {{ name }}</h1><br>
+        <h1>Update User {{ name }}</h1><br>
 <table class="table table-hover table-bordered table-striped">
 <tr>
     <td>Serial No.</td>
@@ -21,7 +21,7 @@
         {% for ouruser in our_users %}
             <tr>
             <td>{{ ouruser.id }}  </td>
-            <td><a href="{{url_for('update', id=ouruser.id)}}">{{ ouruser.name }}</a></td>
+              	<td><a href="{{url_for('update', id=ouruser.id)}}">{{ ouruser.name }}</a></td>
              <td>{{ ouruser.email }}</td>
             </tr>
         {% endfor %}
@@ -29,34 +29,20 @@
 </table>
 
     	{% else %}
-        <h1>User List:</h1><br>
+        <h1>Update User</h1><br>
 
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 
-        <form action="/user/add" method="POST">
+        <form action="/update/{{ name_to_update.id }}" method="POST">
             {{ form.hidden_tag() }}
         {{ form.name.label(class='form-label') }}
-        {{ form.name(class='form-control') }}<br>
+        {{ form.name(class='form-control', value= name_to_update.name) }}<br>
                     {{ form.email.label(class='form-label') }}
-        {{ form.email(class='form-control') }}<br>
+        {{ form.email(class='form-control', value=name_to_update.email ) }}<br>
         {{ form.submit(class='btn btn-primary') }}
         </form>
         <hr>
-<table class="table table-hover table-bordered table-striped">
-<tr>
-    <td>Serial No.</td>
-    <td>Name</td>
-    <td>Email Address</td>
-</tr>
-        {% for ouruser in our_users %}
-            <tr>
-            <td>{{ ouruser.id }}  </td>
-            <td><a href="{{url_for('update', id=ouruser.id)}}">{{ ouruser.name }}</a></td>
-             <td>{{ ouruser.email }}</td>
-            </tr>
-        {% endfor %}
 
-</table>
     {% endif %}</div>
 
 {% endblock %}

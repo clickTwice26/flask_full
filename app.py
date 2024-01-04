@@ -15,6 +15,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/our_users'
 # Initialize the Database
 db = SQLAlchemy(app)
+
+
+
 app.app_context().push()
 # Create Model
 class User(db.Model):
@@ -34,7 +37,26 @@ class UserFrom(FlaskForm):
     email = StringField("Email here", validators=[DataRequired()])
 
     submit = SubmitField("Submit")# Create a route decorator
-@app.route('/user/add', methods=['GET', 'POST'])
+
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id:int):
+    form = UserFrom()
+    name_to_update = User.query.get_or_404(id)
+    if request.method == 'POST':
+        name_to_update.name = request.form['name']
+        name_to_update.email = request.form['email']
+        try:
+            db.session.commit()
+            flash('User update Successful!', 'success')
+            return render_template("update.html", form=form, name_to_update=name_to_update)
+        except:
+            flash('Looks like there was a problem. Try again!', 'success')
+            return render_template("update.html", form=form, name_to_update=name_to_update)
+    else:
+        # flash('Looks like there was a problem. Try again!', 'success')
+        return render_template("update.html", form=form, name_to_update=name_to_update)
+@app.route("/user/add", methods=['GET', 'POST'])    
 def add_user():
     name = None
     form = UserFrom()
@@ -79,7 +101,7 @@ def internal_error(error):
 @app.route("/name", methods=["GET", "POST"])
 def name():
     name = None
-    form = NamerForm()
+    form = UserFrom()
     #validate form
     if form.validate_on_submit():
         name = form.name.data
