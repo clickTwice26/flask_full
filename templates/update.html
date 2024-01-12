@@ -17,12 +17,14 @@
     <td>Serial No.</td>
     <td>Name</td>
     <td>Email Address</td>
+    <td> Favorite Color </td>
 </tr>
         {% for ouruser in our_users %}
             <tr>
             <td>{{ ouruser.id }}  </td>
               	<td><a href="{{url_for('update', id=ouruser.id)}}">{{ ouruser.name }}</a></td>
              <td>{{ ouruser.email }}</td>
+             <td> {{ ouruser.favorite_color }}</td>
             </tr>
         {% endfor %}
 
@@ -39,6 +41,8 @@
         {{ form.name(class='form-control', value= name_to_update.name) }}<br>
                     {{ form.email.label(class='form-label') }}
         {{ form.email(class='form-control', value=name_to_update.email ) }}<br>
+        {{ form.favorite_color.lavel(class='form-label')}}
+        {{ form.favorite_color(class='form-control', value=name_to_update.favorite_color)}}
         {{ form.submit(class='btn btn-primary') }}
         </form>
         <hr>

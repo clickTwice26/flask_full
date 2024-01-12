@@ -3,7 +3,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime
+
+
 tutorial_link="https://www.youtube.com/watch?v=0Qxtt4veJIc&list=PLCC34OHNcOtolz2Vd9ZSeSXWc8Bq23yEz"
 app = Flask(__name__) #helps find all of our files and directory
 app.config['SECRET_KEY'] = 'chipichipichapachapadubidubudabadaba'
@@ -15,8 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/our_users'
 # Initialize the Database
 db = SQLAlchemy(app)
-
-
+migrate = Migrate(app, db)
 
 app.app_context().push()
 # Create Model
@@ -24,8 +26,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
+    favorite_color = db.Column(db.String(120))
     date_added = (db.Column(db.DateTime, default=datetime.utcnow()))
-
+    
     # Create a string
     def __repr__(self):
         return '<Name %r>' % self.name
@@ -35,9 +38,8 @@ class User(db.Model):
 class UserFrom(FlaskForm):
     name = StringField("Name here", validators=[DataRequired()])
     email = StringField("Email here", validators=[DataRequired()])
-
+    favorite_color = StringField("Favorite Color")
     submit = SubmitField("Submit")# Create a route decorator
-
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id:int):
@@ -46,6 +48,7 @@ def update(id:int):
     if request.method == 'POST':
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
+        name_to_update.favorite_color = request.form['favorite_color']
         try:
             db.session.commit()
             flash('User update Successful!', 'success')
@@ -68,12 +71,14 @@ def add_user():
         user = User.query.filter_by(email=str(form.email.data)).first()
 
         if user is None:
-            user = User(name=form.name.data, email=form.email.data)
+            user = User(name=form.name.data, email=form.email.data, favorite_color=form.favorite_color.data)
             db.session.add(user)
             db.session.commit()
         name =form.name.data
         form.name.data = ''
         form.email.data = ''
+        form.favorite_color.data = ''
+        
         flash("User Added Successfully")
     our_users = User.query.order_by(User.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)

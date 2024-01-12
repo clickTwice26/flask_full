@@ -20,14 +20,17 @@ indent_mode=2
 [project]
 name=Flask_Project
 base_path=/home/giyan/Desktop/dept/flask_full
+description=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=887;Python;0;EUTF-8;1;1;0;%2Fhome%2Fgiyan%2FDesktop%2Fdept%2Fflask_full%2Fapp.py;0;4
+current_page=2
+FILE_NAME_0=2534;Python;0;EUTF-8;1;1;0;%2Fhome%2Fgiyan%2FDesktop%2Fdept%2Fflask_full%2Fapp.py;0;4
+FILE_NAME_1=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Fgiyan%2FDesktop%2Fdept%2Fflask_full%2Fmigrations%2Fversions%2F6d4c4b475a61_initial_migration.py;0;4
+FILE_NAME_2=688;HTML;0;EUTF-8;1;1;0;%2Fhome%2Fgiyan%2FDesktop%2Fdept%2Fflask_full%2Ftemplates%2Fadd_user.html;0;4
 
 [VTE]
 last_dir=/home/giyan/Desktop/dept/flask_full
